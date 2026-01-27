@@ -4,8 +4,6 @@
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 from sklearn.preprocessing import RobustScaler
 from sklearn.impute import KNNImputer
@@ -245,61 +243,6 @@ def apply_quartile_bins(df, bins):
         ret[new_col] = pd.cut(ret[feat], bins=cutpoints, labels=labels, include_lowest=True).astype("object")
 
     return ret
-
-def check_bins(df, features, target="Outcome"):
-    """
-    Realiza un análisis de las columnas categóricas especificadas en el DataFrame, mostrando tablas de frecuencia y gráficos de barras
-
-    Parámetros:
-    df (DataFrame): El DataFrame que se analizará.
-    features (list): Lista de nombres de columnas categóricas a analizar.
-    target (str): Nombre de la columna objetivo para calcular la tasa de resultado.
-    ncols (int): Número de columnas en la figura de subplots.
-    figsize (tuple): Tamaño de la figura de subplots.
-
-    Retorna:
-    None
-    """
-
-    summaries = {}
-    
-    for feat in features:
-
-        print("=" * 60)
-        print(f"Análisis de la variable: {feat}")
-
-        freq         = df[feat].value_counts(dropna=False).sort_index()
-        outcome_rate = df.groupby(feat, dropna=False)[target].mean()
-
-        summary = pd.DataFrame({"Frecuencia": freq, "%": (freq / len(df) * 100).round(2), "Outcome_Rate": outcome_rate.round(3)})
-
-        display(summary)
-
-        summaries[feat] = summary.reset_index().rename(columns={"index": feat})
-
-    n = len(features)
-    nrows = (n + 4 - 1) // 4
-
-    fig, axes = plt.subplots(nrows=nrows, ncols=4, figsize=(18, 6 * nrows))
-    axes      = axes.flatten()
-
-    for i, feat in enumerate(features):
-
-        summary_plot = summaries[feat]
-
-        sns.barplot(data=summary_plot, x=feat, y="Outcome_Rate", ax=axes[i])
-
-        axes[i].set_title(f"Outcome rate por bin: {feat}")
-        axes[i].set_xlabel(feat)
-        axes[i].set_ylabel("Outcome rate")
-
-        axes[i].tick_params(axis="x", rotation=30)
-
-    for j in range(n, len(axes)):
-        axes[j].axis("off")
-
-    plt.tight_layout()
-    plt.show()
 
 def compute_woe_table(train_df, feature_bin, target="Outcome", eps=1e-6):
     """

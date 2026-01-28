@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
 
-from src.features import impute_knn, fit_quartile_bins, apply_quartile_bins, compute_woe_table, apply_woe
+from features import impute_knn, fit_quartile_bins, apply_quartile_bins, compute_woe_table, apply_woe
 
 
 # Definir como se trataran las variables

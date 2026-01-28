@@ -10,7 +10,7 @@ Se detalla a continuación cada una de las rutas del repositorio.
 
 - "/app": Código modular en Python para ejecutar la API.
 - "/data": Contiene el set de datos crudo
-- "/scr": Código modular en Python. $\verb|feautures.py|$ 
+- "/scr": Código modular en Python. El archivo $\verb|feautures.py|$ contiene el tratamiento de variables mientras que el archivo $\verb|train.py|$ se encarga de entrenar el modelo. 
 - "/models": Carpeta donde se almacena el modelo de regresión logística
 
 ## Análisis exploratorio

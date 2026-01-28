@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from src.features import impute_knn, apply_quartile_bins, apply_woe
 
@@ -35,14 +35,14 @@ def fit_by_medical_info(df):
     return df
 
 class PredictInput(BaseModel):
-    Pregnancies: int
-    Glucose: float
-    BloodPressure: float
-    SkinThickness: float
-    Insulin: float
-    BMI: float
-    DiabetesPedigreeFunction: float
-    Age: int
+    Pregnancies: int = Field(2, example=2)
+    Glucose: float = Field(120, example=120)
+    BloodPressure: float = Field(70, example=70)
+    SkinThickness: float = Field(20, example=20)
+    Insulin: float = Field(80, example=80)
+    BMI: float = Field(28.5, example=28.5)
+    DiabetesPedigreeFunction: float = Field(0.35, example=0.35)
+    Age: int = Field(45, example=45)
 
 @app.post("/predict")
 def predict(data: dict):

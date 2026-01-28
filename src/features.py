@@ -50,72 +50,6 @@ def add_missing_indicators(df, features):
 
     return ret
 
-def impute_with_global_median(train, test, features):
-    """
-    Imputa los valores faltantes en las columnas especificadas de los DataFrames de entrenamiento y prueba con la mediana global.
-
-    Parámetros:
-    train (DataFrame): El DataFrame de entrenamiento en el que se realizará la imputación.
-    test (DataFrame): El DataFrame de prueba en el que se realizará la imputación.
-    features (list): Lista de nombres de columnas donde se imputarán los valores faltantes con la mediana global.
-
-    Retorna:
-    tuple: Una tupla que contiene los DataFrames modificados de entrenamiento y prueba con los valores faltantes imputados con la 
-    mediana global en las columnas especificadas.
-    """
-
-    train_ret = train.copy()
-    test_ret  = test.copy()
-
-    for feat in features:
-
-        global_median = train_ret[feat].median()
-
-        train_ret[feat] = train_ret[feat].fillna(global_median)
-        test_ret[feat]  = test_ret[feat].fillna(global_median)
-
-    return train_ret, test_ret
-
-def impute_median_by_outcome(train, test, features, target="Outcome"):
-    """
-    Imputa los valores faltantes en las columnas especificadas de los DataFrames de entrenamiento y prueba con la mediana calculada 
-    según el valor de una columna objetivo.
-
-    Parámetros:
-    train (DataFrame): El DataFrame de entrenamiento en el que se realizará la imputación.
-    test (DataFrame): El DataFrame de prueba en el que se realizará la imputación.
-    features (list): Lista de nombres de columnas donde se imputarán los valores faltantes con la mediana por grupo.
-    target (str): Nombre de la columna objetivo que se utilizará para agrupar los datos al calcular la mediana.
-
-    Retorna:
-    tuple: Una tupla que contiene los DataFrames modificados de entrenamiento y prueba con los valores faltantes imputados con la 
-    mediana por grupo en las columnas especificadas.
-    """
-
-    train_ret = train.copy()
-    test_ret  = test.copy()
-
-    for feat in features:
-        
-        global_median = train_ret[feat].median(skipna=True)
-
-        class_medians = train_ret.groupby(target)[feat].median()
-
-        def fill_group(s):
-
-            m = class_medians.loc[s.name]
-
-            if pd.isna(m):
-
-                m = global_median
-
-            return s.fillna(m)
-
-        train_ret[feat] = train_ret.groupby(target)[feat].transform(fill_group)
-        test_ret[feat]  = test_ret[feat].fillna(global_median)
-
-    return train_ret, test_ret
-
 def impute_knn(train, test, features, n_neighbors=5):
     """
     Imputa los valores faltantes en las columnas especificadas de los DataFrames de entrenamiento y prueba utilizando el algoritmo 
@@ -308,21 +242,3 @@ def apply_woe(df, feature_bin, woe_map, new_name=None, default_woe=0.0):
     ret[new_name] = (ret[feature_bin].astype("object").map(woe_map).astype(float).fillna(float(default_woe)))
 
     return ret
-
-def one_hot_train_test(train_df, test_df, cat_features, drop_first=False):
-    """
-    One-hot encoding consistente entre train y test.
-
-    Parámetros:
-    train_df (DataFrame): El DataFrame de entrenamiento.
-    test_df (DataFrame): El DataFrame de prueba.
-    cat_features (list): Lista de nombres de columnas categóricas a codificar.
-    drop_first (bool): Si es True, se eliminará la primera categoría para evitar la multicolinealidad.
-    """
-
-    Xtr = pd.get_dummies(train_df, columns=cat_features, drop_first=drop_first)
-    Xte = pd.get_dummies(test_df,  columns=cat_features, drop_first=drop_first)
-
-    Xtr, Xte = Xtr.align(Xte, join="left", axis=1, fill_value=0)
-
-    return Xtr, Xte

@@ -8,7 +8,7 @@ warnings.filterwarnings("ignore")
 
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_auc_score, accuracy_score, precision_score, recall_score, f1_score
 
 from features import impute_knn, fit_quartile_bins, apply_quartile_bins, compute_woe_table, apply_woe
 
@@ -107,8 +107,19 @@ def main():
 
     proba = model.predict_proba(test_df[FEATURES_FINAL])[:, 1]
 
-    auc   = roc_auc_score(y_test, proba)
-    print(f"ROC-AUC test: {auc:.4f}")
+    # Métricas
+    auc       = roc_auc_score(y_test, proba)
+    accuracy  = accuracy_score(y_test, pred)
+    precision = precision_score(y_test, pred, zero_division=0)
+    recall    = recall_score(y_test, pred, zero_division=0)
+    f1        = f1_score(y_test, pred, zero_division=0)
+
+    print(f"ROC-AUC test : {auc:.4f}")
+    print(f"Accuracy     : {accuracy:.4f}")
+    print(f"Precision    : {precision:.4f}")
+    print(f"Recall       : {recall:.4f}")
+    print(f"F1-score     : {f1:.4f}")
+
 
     bundle = {
         "model": model,

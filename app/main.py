@@ -35,14 +35,14 @@ def fit_by_medical_info(df):
     return df
 
 class PredictInput(BaseModel):
-    Pregnancies: int = Field(2, example=2)
-    Glucose: float = Field(120, example=120)
-    BloodPressure: float = Field(70, example=70)
-    SkinThickness: float = Field(20, example=20)
-    Insulin: float = Field(80, example=80)
-    BMI: float = Field(28.5, example=28.5)
+    Pregnancies: int                = Field(2, example=2)
+    Glucose: float                  = Field(120, example=120)
+    BloodPressure: float            = Field(70, example=70)
+    SkinThickness: float            = Field(20, example=20)
+    Insulin: float                  = Field(80, example=80)
+    BMI: float                      = Field(28.5, example=28.5)
     DiabetesPedigreeFunction: float = Field(0.35, example=0.35)
-    Age: int = Field(45, example=45)
+    Age: int                        = Field(45, example=45)
 
 @app.post("/predict")
 def predict(data: PredictInput):

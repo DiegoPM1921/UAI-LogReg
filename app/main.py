@@ -45,7 +45,7 @@ class PredictInput(BaseModel):
     Age: int = Field(45, example=45)
 
 @app.post("/predict")
-def predict(data: dict):
+def predict(data: PredictInput):
 
     try:
 

@@ -54,7 +54,7 @@ Se entrenó un modelo para la predicción de diabetes. El desempeño del modelo 
 - F1-score
 - ROC-AUC
 
-## Resultados
+## Resultados y análisis
 
 A continuación, se muestran las métricas obtenidas para el modelo entrenado.
 
@@ -62,3 +62,4 @@ A continuación, se muestran las métricas obtenidas para el modelo entrenado.
 |------|----------|-----------|--------|----------|---------|
 | KNN + WOE | 0.7403 | 0.6000 | 0.7778 | 0.6774 | 0.8370 |
 
+En contextos clínicos, un buen modelo no es necesariamente aquel con las mejores métricas globales, sino aquel que minimiza los errores más costosos. En este caso, resulta más crítico evitar clasificar a un paciente con diabetes como no diabético que el error contrario. Por lo tanto, el análisis del Recall cobra especial relevancia frente a otras métricas. Maximizar este valor puede ser el resultado más valioso en estos contextos.

@@ -106,6 +106,7 @@ def main():
     model.fit(train_df[FEATURES_FINAL], y_train)
 
     proba = model.predict_proba(test_df[FEATURES_FINAL])[:, 1]
+    pred  = (proba >= 0.5).astype(int)
 
     # Métricas
     auc       = roc_auc_score(y_test, proba)
